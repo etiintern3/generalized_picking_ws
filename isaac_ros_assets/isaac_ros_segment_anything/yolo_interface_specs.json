@@ -1,0 +1,11 @@
+{
+    "input_image": {
+        "width": 640,
+        "height": 640
+    },
+    "subscribed_topics": {
+        "image": "/yolov8_encoder/resize/image",
+        "camera_info": "/yolov8_encoder/resize/camera_info",
+        "prompt": "/detections_output"
+    }
+}

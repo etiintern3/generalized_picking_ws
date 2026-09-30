@@ -1,0 +1,22 @@
+# Copyright (c) 2026 — local layer for generalized_picking_ws
+# Extra Isaac ROS packages so they survive a fresh Dev container.
+#
+# Used when image key ends with ".perception", e.g.:
+#   CONFIG_IMAGE_KEY=ros2_humble.perception
+# → builds x86_64.ros2_humble.perception
+
+ARG BASE_IMAGE
+FROM ${BASE_IMAGE}
+
+ENV DEBIAN_FRONTEND=noninteractive
+
+RUN --mount=type=cache,target=/var/cache/apt \
+    apt-get update && apt-get install -y --no-install-recommends \
+      ros-humble-isaac-ros-examples \
+      ros-humble-isaac-ros-segment-anything \
+      ros-humble-cv-bridge \
+      python3-numpy \
+    && rm -rf /var/lib/apt/lists/*
+
+# OpenCV in this image expects NumPy 1.x
+RUN pip3 install --no-cache-dir --break-system-packages 'numpy<2'

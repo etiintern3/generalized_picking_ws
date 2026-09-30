@@ -1,0 +1,11 @@
+{
+    "input_image": {
+        "width": 1200,
+        "height": 632
+    },
+    "subscribed_topics": {
+        "image": "/image",
+        "camera_info": "/camera_info",
+        "prompt": "/detectnet/detections"
+    }
+}

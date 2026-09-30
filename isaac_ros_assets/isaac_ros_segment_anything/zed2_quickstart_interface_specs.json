@@ -1,0 +1,17 @@
+{
+    "camera_model": "zed2",
+    "camera_frame": "zed2_base_link",
+    "input_image": {
+        "width": 640,
+        "height": 640
+    },
+    "subscribed_topics": {
+        "image": "/yolov8_encoder/resize/image",
+        "camera_info": "/yolov8_encoder/resize/camera_info",
+        "prompt": "/detections_output"
+    },
+    "camera_resolution": {
+        "width": 1280,
+        "height": 720
+    }
+}

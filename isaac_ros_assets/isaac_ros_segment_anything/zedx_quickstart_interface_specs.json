@@ -1,0 +1,17 @@
+{
+    "camera_model": "zedx",
+    "camera_frame": "zedx_base_link",
+    "input_image": {
+        "width": 640,
+        "height": 640
+    },
+    "subscribed_topics": {
+        "image": "/yolov8_encoder/resize/image",
+        "camera_info": "/yolov8_encoder/resize/camera_info",
+        "prompt": "/detections_output"
+    },
+    "camera_resolution": {
+        "width": 1920,
+        "height": 1200
+    }
+}

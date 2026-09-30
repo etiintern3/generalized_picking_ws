@@ -1,0 +1,20 @@
+# Large / generated / third-party — not for git
+bags/
+output/
+isaac_ros_assets/models/
+isaac_ros_assets/isaac_ros_segment_anything/vit_b.pth
+isaac_ros_assets/isaac_ros_segment_anything/segment_anything_sample_data/
+*.onnx
+*.pth
+*.pt
+*.ply
+
+# NVIDIA Isaac ROS common (clone separately: release-3.2)
+src/isaac_ros_common/
+
+# Python / editor
+__pycache__/
+*.pyc
+.python-version
+.vscode/
+.idea/

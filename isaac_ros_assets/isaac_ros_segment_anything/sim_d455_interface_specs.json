@@ -1,0 +1,11 @@
+{
+    "input_image": {
+        "width": 1280,
+        "height": 720
+    },
+    "subscribed_topics": {
+        "image": "/camera/realsense/rgb",
+        "camera_info": "/camera/realsense/camera_info",
+        "prompt": "/prompts"
+    }
+}
