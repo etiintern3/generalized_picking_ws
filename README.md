@@ -6,20 +6,20 @@ UR10e + Robotiq 2F-85 · Isaac Sim 5.1 · Isaac ROS SAM1 (Humble)
 
 **GitHub:** https://github.com/etiintern3/generalized_picking_ws
 
-## Tutorials (Phase 1)
+## Start here — Phase 1
 
-1. **Week 1 — Isaac ROS SAM setup**  
-   [docs/TUTORIAL_Phase1_Week1_Isaac_ROS_SAM.md](docs/TUTORIAL_Phase1_Week1_Isaac_ROS_SAM.md)
+**[docs/PHASE1_README.md](docs/PHASE1_README.md)** — intro to Phase 1, what you will build, and which tutorial track to follow (Week 1→2→3 vs standalone from GitHub).
 
-2. **Week 2 — Tray ROI, grid prompts, mask quality**  
-   [docs/TUTORIAL_Phase1_Week2_Grid_and_Masks.md](docs/TUTORIAL_Phase1_Week2_Grid_and_Masks.md)
+### Tutorial list
 
-3. **Week 3 — Point clouds (continuation of Week 1–2)**  
-   [docs/TUTORIAL_Phase1_Week3_PointClouds_Continuation.md](docs/TUTORIAL_Phase1_Week3_PointClouds_Continuation.md)  
-   No re-clone. Multi-terminal commands; object `.ply` clouds + optional `run_phase1.sh`.
+1. [Week 1 — Isaac ROS SAM](docs/TUTORIAL_Phase1_Week1_Isaac_ROS_SAM.md)  
+2. [Week 2 — ROI & grid masks](docs/TUTORIAL_Phase1_Week2_Grid_and_Masks.md)  
+3. [Week 3 — Point clouds (continuation)](docs/TUTORIAL_Phase1_Week3_PointClouds_Continuation.md)  
+4. [Standalone — full pipeline from GitHub](docs/TUTORIAL_Phase1_Standalone_From_GitHub.md)  
 
-4. **Standalone — full Phase 1 from GitHub**  
-   [docs/TUTORIAL_Phase1_Standalone_From_GitHub.md](docs/TUTORIAL_Phase1_Standalone_From_GitHub.md)  
-   For a new PC: clone repo → Isaac ROS + ONNX → `run_phase1.sh`.
+## Phase 2 (grasps)
 
-Index: [docs/TUTORIAL_Phase1_Complete_PointClouds_and_Bringup.md](docs/TUTORIAL_Phase1_Complete_PointClouds_and_Bringup.md)
+**After Phase 1 Standalone:** follow  
+**[docs/TUTORIAL_Phase2_Grasp_Generation.md](docs/TUTORIAL_Phase2_Grasp_Generation.md)** — front-cam SAM → scene `npz` → Contact-GraspNet (`jp_cgnet`) → ranked 2F-85 grasps (no MoveIt).
+
+CGN lives under `third_party/cgnet` (clone upstream yourself; not shipped in git).  

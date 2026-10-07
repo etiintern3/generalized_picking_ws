@@ -1,5 +1,10 @@
 #!/usr/bin/env python3
-"""Filter SAM masks, merge duplicates (2D IoU NMS, keep smaller), back-project to PLY."""
+"""Front-camera SAM masks → PLY: area + IoU NMS + planarity filter (drop table planes).
+
+Unlike masks_to_pointclouds_nms.py (avg-Z tray floor), this keeps masks whose
+3D points are NOT well fit by a single plane (objects) and drops near-planar
+masks (table patches). Does not modify the NMS script.
+"""
 from pathlib import Path
 
 import numpy as np
@@ -9,29 +14,23 @@ from sensor_msgs.msg import Image, CameraInfo
 from isaac_ros_tensor_list_interfaces.msg import TensorList
 from cv_bridge import CvBridge
 
-# Tray interior ROI (pixels) — same tuned values as masks_to_pointclouds.py
-#X_MIN, X_MAX = 540, 705
-#Y_MIN, Y_MAX = 215, 475
-X_MIN, X_MAX = 220, 1000
+# Front-camera tabletop crop (same as frontcam_table_grid_prompts.py)
+X_MIN, X_MAX = 200, 1050
 Y_MIN, Y_MAX = 500, 720
 
-# Area filter (pixels inside mask, after ROI)
 MIN_AREA = 3000
-MAX_AREA = 18000
+MAX_AREA = 180000
+IOU_MERGE = 0.9
 
-# If two masks overlap more than this, keep only the smaller one
-IOU_MERGE = 0.4
-
-# Depth validity (meters)
 MIN_DEPTH = 0.05
 MAX_DEPTH = 5.0
 MIN_POINTS = 500
 
-# Drop clouds whose average Z is at tray floor distance from camera (meters)
-TRAY_Z_MIN = 1.30
-TRAY_Z_MAX = 1.31
+# Plane-fit RMS residual (meters). Below → treat as table plane and drop.
+# Tune from logged plane_RMS values: table patches are low; object masks higher.
+PLANAR_RMS_MAX = 0.004
 
-OUT_DIR = Path('/workspaces/isaac_ros-dev/output/clouds_nms')
+OUT_DIR = Path('/workspaces/isaac_ros-dev/output/clouds_planar')
 SAVE_EVERY_N = 30
 MAX_POINTS_SAVE = 20000
 
@@ -54,8 +53,6 @@ def mask_iou(a: np.ndarray, b: np.ndarray) -> float:
 
 
 def nms_masks(candidates, iou_thresh: float):
-    """candidates: list of (area, bool_mask). Keep smaller, drop high-IoU duplicates."""
-    # Smallest first so tighter masks win; later (larger) overlaps are skipped.
     candidates = sorted(candidates, key=lambda x: x[0])
     kept = []
     for area, m in candidates:
@@ -65,9 +62,24 @@ def nms_masks(candidates, iou_thresh: float):
     return kept
 
 
-class MasksToCloudsNMS(Node):
+def plane_rms(xyz: np.ndarray) -> float:
+    """RMS distance of points to best-fit plane (SVD)."""
+    if len(xyz) < 3:
+        return 0.0
+    c = xyz.mean(axis=0)
+    _, s, vh = np.linalg.svd(xyz - c, full_matrices=False)
+    normal = vh[-1]
+    nrm = np.linalg.norm(normal)
+    if nrm < 1e-12:
+        return 0.0
+    normal = normal / nrm
+    dist = (xyz - c) @ normal
+    return float(np.sqrt(np.mean(dist * dist)))
+
+
+class MasksToCloudsPlanar(Node):
     def __init__(self):
-        super().__init__('masks_to_pointclouds_nms')
+        super().__init__('masks_to_pointclouds_planar')
         self.bridge = CvBridge()
         self.K = None
         self.depth = None
@@ -78,8 +90,8 @@ class MasksToCloudsNMS(Node):
             TensorList, '/segment_anything/raw_segmentation_mask', self.on_masks, 10
         )
         self.get_logger().info(
-            f'NMS IoU>={IOU_MERGE} | ROI=({X_MIN},{Y_MIN})-({X_MAX},{Y_MAX}) | '
-            f'area=[{MIN_AREA},{MAX_AREA}] | drop avg_Z in [{TRAY_Z_MIN},{TRAY_Z_MAX}] | '
+            f'planar filter | ROI=({X_MIN},{Y_MIN})-({X_MAX},{Y_MAX}) | '
+            f'area=[{MIN_AREA},{MAX_AREA}] | drop if plane_RMS<{PLANAR_RMS_MAX} m | '
             f'out={OUT_DIR}'
         )
 
@@ -106,7 +118,6 @@ class MasksToCloudsNMS(Node):
 
         self.frame += 1
 
-        # 1) Area + ROI filter → candidate masks
         candidates = []
         for i in range(n):
             m = masks[i] > 0
@@ -118,12 +129,10 @@ class MasksToCloudsNMS(Node):
                 continue
             candidates.append((area, m))
 
-        # 2) NMS: merge duplicate masks of the same object
         kept_masks = nms_masks(candidates, IOU_MERGE)
 
-        # 3) Back-project surviving masks; drop tray-floor clouds by avg Z
         clouds = []
-        dropped_tray_z = 0
+        dropped_planar = 0
         for area, m in kept_masks:
             ys, xs = np.where(m)
             z = depth[ys, xs]
@@ -131,41 +140,48 @@ class MasksToCloudsNMS(Node):
             xs, ys, z = xs[valid], ys[valid], z[valid]
             if len(z) < MIN_POINTS:
                 continue
-            z_avg = float(z.mean())
-#            if TRAY_Z_MIN <= z_avg <= TRAY_Z_MAX:
-#                dropped_tray_z += 1
-#                continue
+
             X = (xs - cx) * z / fx
             Y = (ys - cy) * z / fy
             xyz = np.stack([X, Y, z], axis=1)
-            clouds.append((area, xyz, z_avg))
+
+            rms = plane_rms(xyz)
+            z_span = float(z.max() - z.min())
+            if rms < PLANAR_RMS_MAX:
+                dropped_planar += 1
+                continue
+
+            clouds.append((area, xyz, rms, z_span))
 
         self.get_logger().info(
             f'frame {self.frame}: {n} raw -> {len(candidates)} area -> '
-            f'{len(kept_masks)} NMS -> {dropped_tray_z} tray-Z drop -> {len(clouds)} clouds'
+            f'{len(kept_masks)} NMS -> {dropped_planar} planar drop -> {len(clouds)} clouds'
         )
-        for j, (area, xyz, z_avg) in enumerate(clouds):
+        for j, (area, xyz, rms, z_span) in enumerate(clouds):
             self.get_logger().info(
-                f'  cloud[{j}] area={area} n_pts={len(xyz)} avg_Z={z_avg:.4f} m'
+                f'  cloud[{j}] area={area} n_pts={len(xyz)} '
+                f'plane_RMS={rms:.5f} m z_span={z_span:.4f} m'
             )
 
         if self.frame % SAVE_EVERY_N != 0 or not clouds:
             return
 
         stamp = f'{msg.header.stamp.sec}_{msg.header.stamp.nanosec}'
-        for j, (area, xyz, z_avg) in enumerate(clouds):
+        for j, (area, xyz, rms, z_span) in enumerate(clouds):
             if len(xyz) > MAX_POINTS_SAVE:
                 idx = np.random.choice(len(xyz), MAX_POINTS_SAVE, replace=False)
                 xyz = xyz[idx]
             out = OUT_DIR / f'cloud_{stamp}_{j}_a{area}.ply'
             write_ply(out, xyz)
-            self.get_logger().info(f'saved {out} ({len(xyz)} pts, avg_Z={z_avg:.4f})')
+            self.get_logger().info(
+                f'saved {out} ({len(xyz)} pts, plane_RMS={rms:.5f}, z_span={z_span:.4f})'
+            )
 
 
 def main():
     OUT_DIR.mkdir(parents=True, exist_ok=True)
     rclpy.init()
-    node = MasksToCloudsNMS()
+    node = MasksToCloudsPlanar()
     try:
         rclpy.spin(node)
     except KeyboardInterrupt:

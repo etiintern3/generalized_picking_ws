@@ -12,7 +12,7 @@ X_MIN, X_MAX = 220, 1000
 Y_MIN, Y_MAX = 500, 720
 
 NX, NY = 5, 5
-BOX_W, BOX_H = 70.0, 70.0
+BOX_W, BOX_H = 100.0, 100.0
 
 CELL_W = (X_MAX - X_MIN) / NX
 CELL_H = (Y_MAX - Y_MIN) / NY
