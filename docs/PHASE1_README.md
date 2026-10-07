@@ -118,8 +118,7 @@ bash ${ISAAC_ROS_WS}/scripts/run_phase1.sh
 
 ## After Phase 1
 
-**Phase 2 (next after Standalone):** Contact-GraspNet on the full table scene + SAM masks, 85 mm cap, ranked list.  
-Tutorial (assumes you finished Phase 1 Standalone): [`TUTORIAL_Phase2_Grasp_Generation.md`](./TUTORIAL_Phase2_Grasp_Generation.md).  
+**Phase 2 (next after Standalone):** read [`PHASE2_README.md`](./PHASE2_README.md), then the how-to [`TUTORIAL_Phase2_Grasp_Generation.md`](./TUTORIAL_Phase2_Grasp_Generation.md).  
 Handoff notes: [`PHASE2_HANDOFF.md`](./PHASE2_HANDOFF.md).
 
 Motion planning is Phase 3.

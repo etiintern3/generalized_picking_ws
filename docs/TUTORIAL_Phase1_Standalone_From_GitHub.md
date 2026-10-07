@@ -266,7 +266,7 @@ Replay instead of Sim when testing perception only (`ros2 bag play -l ...`).
 
 → Phase 1 complete.
 
-**Next:** [Phase 2 — Grasp generation](./TUTORIAL_Phase2_Grasp_Generation.md) (Contact-GraspNet on the full scene, 2F-85 width cap). After you pull Phase 2, `run_phase1.sh` uses the **front-camera** prompt + planar cloud scripts — see that tutorial §0.
+**Next:** [Phase 2 intro](./PHASE2_README.md), then the [Phase 2 tutorial](./TUTORIAL_Phase2_Grasp_Generation.md) (Contact-GraspNet, 2F-85 width cap). After you pull Phase 2, `run_phase1.sh` uses the **front-camera** prompt + planar cloud scripts.
 
 ---
 

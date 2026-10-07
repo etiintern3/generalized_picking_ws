@@ -1,5 +1,7 @@
 # Tutorial — Phase 2: Grasp generation (after Phase 1 Standalone)
 
+**Read first:** [PHASE2_README.md](./PHASE2_README.md) (what Phase 2 is and the mental model).
+
 **For:** you already finished [Phase 1 Standalone from GitHub](./TUTORIAL_Phase1_Standalone_From_GitHub.md) on this machine (`~/generalized_picking_ws`, Isaac ROS SAM1, Sim camera working).
 
 **Goal:** From the live front RGB-D view, get a **ranked list of 6-DoF grasps** for the Robotiq **2F-85** (max opening **85 mm**) using **Contact-GraspNet** on the **full scene** (not isolated object PLYs).
@@ -48,23 +50,12 @@ UOIS / `uois3d` are **not** part of this pipeline.
 
 ## 1. Update this workspace from GitHub
 
-On the **host**, in the folder you already use for Phase 1:
+Phase 2 is on **`main`**. On the **host**, in the folder you already use for Phase 1:
 
 ```bash
 export ISAAC_ROS_WS=$HOME/generalized_picking_ws
 cd ${ISAAC_ROS_WS}
 
-git fetch origin
-git status
-# Recommended: short-lived branch, then merge to main via PR (see §9)
-git checkout -b phase2-cgn
-git pull origin main   # if you already pushed; otherwise skip
-```
-
-After the Phase 2 PR is on `main`:
-
-```bash
-cd ${ISAAC_ROS_WS}
 git checkout main
 git pull origin main
 ```

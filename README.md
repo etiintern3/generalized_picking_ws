@@ -19,7 +19,8 @@ UR10e + Robotiq 2F-85 · Isaac Sim 5.1 · Isaac ROS SAM1 (Humble)
 
 ## Phase 2 (grasps)
 
-**After Phase 1 Standalone:** follow  
-**[docs/TUTORIAL_Phase2_Grasp_Generation.md](docs/TUTORIAL_Phase2_Grasp_Generation.md)** — front-cam SAM → scene `npz` → Contact-GraspNet (`jp_cgnet`) → ranked 2F-85 grasps (no MoveIt).
+**Start here:** **[docs/PHASE2_README.md](docs/PHASE2_README.md)** — what Phase 2 is, pipeline, envs (read before the tutorial).
+
+**Then:** **[docs/TUTORIAL_Phase2_Grasp_Generation.md](docs/TUTORIAL_Phase2_Grasp_Generation.md)** — install CGN, dump scene, run/rank/visualize (assumes Phase 1 Standalone done).
 
 CGN lives under `third_party/cgnet` (clone upstream yourself; not shipped in git).  
