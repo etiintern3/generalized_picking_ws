@@ -264,7 +264,9 @@ Replay instead of Sim when testing perception only (`ros2 bag play -l ...`).
 - About one `.ply` per object under `output/clouds_nms/`  
 - No tray-floor-only clouds  
 
-→ Phase 1 complete. Next: grasp networks (Phase 2).
+→ Phase 1 complete.
+
+**Next:** [Phase 2 — Grasp generation](./TUTORIAL_Phase2_Grasp_Generation.md) (Contact-GraspNet on the full scene, 2F-85 width cap). After you pull Phase 2, `run_phase1.sh` uses the **front-camera** prompt + planar cloud scripts — see that tutorial §0.
 
 ---
 
@@ -275,3 +277,4 @@ Replay instead of Sim when testing perception only (`ros2 bag play -l ...`).
 | Docker / ONNX / first SAM masks | [Week 1](./TUTORIAL_Phase1_Week1_Isaac_ROS_SAM.md) |
 | ROI, grid, bbox size, flat tray | [Week 2](./TUTORIAL_Phase1_Week2_Grid_and_Masks.md) |
 | Continuation without re-cloning | [Week 3](./TUTORIAL_Phase1_Week3_PointClouds_Continuation.md) |
+| Grasps (after this tutorial) | [Phase 2](./TUTORIAL_Phase2_Grasp_Generation.md) |

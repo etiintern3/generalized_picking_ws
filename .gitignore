@@ -12,6 +12,9 @@ isaac_ros_assets/isaac_ros_segment_anything/segment_anything_sample_data/
 # NVIDIA Isaac ROS common (clone separately: release-3.2)
 src/isaac_ros_common/
 
+# Contact-GraspNet / UOIS — clone & download checkpoints locally (see Phase 2 tutorial)
+third_party/
+
 # Python / editor
 __pycache__/
 *.pyc

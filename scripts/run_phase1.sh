@@ -56,12 +56,12 @@ PIDS+=($!)
 # Let SAM nodes come up, then set bbox mode
 bash "${SCRIPTS}/set_sam_bbox_mode.sh"
 
-echo "[phase1] Starting tray grid prompts..."
-python3 "${SCRIPTS}/tray_grid_prompts.py" &
+echo "[phase1] Starting front-cam table grid prompts..."
+python3 "${SCRIPTS}/frontcam_table_grid_prompts.py" &
 PIDS+=($!)
 
-echo "[phase1] Starting masks → point clouds (NMS)..."
-python3 "${SCRIPTS}/masks_to_pointclouds_nms.py" &
+echo "[phase1] Starting masks → point clouds (planar filter)..."
+python3 "${SCRIPTS}/masks_to_pointclouds_planar.py" &
 PIDS+=($!)
 
 if [[ "${USE_VIZ}" == "1" ]]; then
@@ -79,7 +79,7 @@ if [[ "${USE_RQT}" == "1" ]]; then
 fi
 
 echo ""
-echo "[phase1] All started. PLYs → ${WS}/output/clouds_nms/"
+echo "[phase1] All started. PLYs → ${WS}/output/clouds_planar/"
 echo "[phase1] Ctrl+C to stop everything."
 echo ""
 

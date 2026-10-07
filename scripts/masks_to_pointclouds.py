@@ -9,11 +9,13 @@ from sensor_msgs.msg import Image, CameraInfo
 from isaac_ros_tensor_list_interfaces.msg import TensorList
 from cv_bridge import CvBridge
 # Tray interior ROI (pixels)
-X_MIN, X_MAX = 540, 705
-Y_MIN, Y_MAX = 215, 475
+#X_MIN, X_MAX = 540, 705
+#Y_MIN, Y_MAX = 215, 475
+X_MIN, X_MAX = 220, 1000
+Y_MIN, Y_MAX = 500, 720
 # Area filter (pixels inside mask)
-MIN_AREA = 10
-MAX_AREA = 5000   # drop huge tray-bleed blobs
+MIN_AREA = 1000
+MAX_AREA = 8000   # drop huge tray-bleed blobs
 OUT_DIR = Path('/workspaces/isaac_ros-dev/output/clouds')
 SAVE_EVERY_N = 30  # save about once per ~2s at 15 Hz
 def write_ply(path: Path, xyz: np.ndarray):
