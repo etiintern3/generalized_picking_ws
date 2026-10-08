@@ -20,7 +20,7 @@ Roadmap phases:
 | 0 Baseline pick-place (known poses) | Done (in `ur_ws`) |
 | **1 Class-agnostic perception → object point clouds** | **Done** |
 | **2 Grasp pose generation** | **Done** — see [`TUTORIAL_Phase2_Grasp_Generation.md`](./TUTORIAL_Phase2_Grasp_Generation.md) |
-| 3 Motion planning | Later |
+| **3 Motion planning** | **NEXT** — see [`PHASE3_HANDOFF.md`](./PHASE3_HANDOFF.md) |
 | 4 Grasp robustness | Later |
 | 5 Domain randomization | Later |
 | 6 Real robot | Later |
@@ -116,7 +116,4 @@ User preference: **guide with commands**; they often run steps themselves. Prefe
 
 ## 7. Suggested first actions for Phase 3
 
-1. Read [`TUTORIAL_Phase2_Grasp_Generation.md`](./TUTORIAL_Phase2_Grasp_Generation.md).  
-2. Take top grasp `T_cam` from `output/grasps/*_ranked.json`.  
-3. TF camera → `base_link` in Sim (do not edit `ur_ws` unless asked).  
-4. IK + collision + staged approach (pre-grasp → grasp → retreat).
+Use the dedicated handoff: [`PHASE3_HANDOFF.md`](./PHASE3_HANDOFF.md).

@@ -130,4 +130,6 @@ bash ${ISAAC_ROS_WS}/scripts/run_phase2.sh
 
 ## After Phase 2
 
-**Phase 3:** take top `T_cam` from the ranked JSON, get TF camera → `base_link` / `world` in Sim, then IK, collision, and staged approach. Leave `~/ur_ws` alone until you explicitly wire execution.
+**Phase 3 (next):** motion planning — TF → IK → staged trajectories.  
+Handoff for a new agent: [`PHASE3_HANDOFF.md`](./PHASE3_HANDOFF.md).  
+Leave `~/ur_ws` alone until you explicitly wire execution.

@@ -23,4 +23,8 @@ UR10e + Robotiq 2F-85 · Isaac Sim 5.1 · Isaac ROS SAM1 (Humble)
 
 **Then:** **[docs/TUTORIAL_Phase2_Grasp_Generation.md](docs/TUTORIAL_Phase2_Grasp_Generation.md)** — install CGN, dump scene, run/rank/visualize (assumes Phase 1 Standalone done).
 
-CGN lives under `third_party/cgnet` (clone upstream yourself; not shipped in git).  
+CGN lives under `third_party/cgnet` (clone upstream yourself; not shipped in git).
+
+## Phase 3 (motion) — next
+
+**Handoff for a new agent:** **[docs/PHASE3_HANDOFF.md](docs/PHASE3_HANDOFF.md)** — TF camera→base, IK, collision, staged pick (do not edit `ur_ws` unless asked).  
