@@ -11,7 +11,7 @@ from vision_msgs.msg import Detection2DArray, Detection2D, ObjectHypothesisWithP
 X_MIN, X_MAX = 220, 1000
 Y_MIN, Y_MAX = 500, 720
 
-NX, NY = 5, 5
+NX, NY = 6, 6
 BOX_W, BOX_H = 100.0, 100.0
 
 CELL_W = (X_MAX - X_MIN) / NX
